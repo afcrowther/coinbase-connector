@@ -5,8 +5,9 @@
 *.log
 
 # IntelliJ files
-.idea
+.idea/
 *.iml
+target/
 
 # BlueJ files
 *.ctxt
