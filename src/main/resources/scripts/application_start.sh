@@ -11,4 +11,4 @@ fi
 # tune the gc towards a lot of short lived objects
 JVM_ARGS="-Xms4G -Xmx12G -XX:+UseCompressedOops -XX:SurvivorRatio=1 -XX:NewRatio=1"
 
-java ${JVM_ARGS} -jar ../../CoinbaseConnector.jar "$1"
+java ${JVM_ARGS} -jar ../../coinbase-connector-*-jar-with-dependencies.jar "$1"
