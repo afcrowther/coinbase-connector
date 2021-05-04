@@ -3,8 +3,8 @@ package com.afcrowther.coinbase.connector.handlers;
 import com.afcrowther.coinbase.connector.domain.coinbase.ErrorMessage;
 import com.afcrowther.coinbase.connector.domain.coinbase.OrderBookSnapshot;
 import com.afcrowther.coinbase.connector.exception.CoinbaseConnectionException;
-import com.afcrowther.coinbase.connector.service.OrderBookAggregatorService;
 import com.afcrowther.coinbase.connector.printer.Printer;
+import com.afcrowther.coinbase.connector.service.OrderBookAggregatorService;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
@@ -12,7 +12,6 @@ import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
 
-import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicLongArray;
 
 import static java.lang.String.format;
@@ -97,7 +96,6 @@ public class CoinbaseWebSocketMessageHandler implements Handler<Buffer> {
         // we don't mind allocating for this message as although it is big, it is a one off and will be collected fairly
         // promptly and shouldn't ever reach further than eden space
         OrderBookSnapshot snapshot = Json.decodeValue(buffer, OrderBookSnapshot.class);
-        System.out.println(buffer.toString(Charset.defaultCharset()));
         orderBookAggregatorService.updateOrderBook(snapshot, bids, asks);
         printerFuture = vertx.executeBlocking(printerHandler);
     }
