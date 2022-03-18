@@ -10,6 +10,7 @@ public class ConsolePrinter implements Printer {
     private static final char TAB = '\t';
     private static final char NEW_LINE = '\n';
     private static final String TITLE_LINE = "Price \t\t\t Quantity";
+    private static final String SPREAD = "Spread: ";
     // rudimentary attempt at making the
     private static final StringBuilder HEADER =
             new StringBuilder("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" + TITLE_LINE + NEW_LINE);
@@ -57,6 +58,8 @@ public class ConsolePrinter implements Printer {
     }
 
     protected StringBuilder buildOrderBookStringRepresentation(AtomicLongArray asks, AtomicLongArray bids) {
+        long lowAsk = -1;
+        long highBid = -1;
         HEADER.append(ANSI_RED);
         HEADER.append(NEW_LINE);
         for (int i = 0; i < asks.length(); i += 2) {
@@ -66,6 +69,7 @@ public class ConsolePrinter implements Printer {
                 HEADER.append(TAB);
                 LongUtils.appendLongToStringBuilder(asks.get(i + 1), HEADER, quantityDecimals);
                 HEADER.append(NEW_LINE);
+                lowAsk = asks.get(i);
             }
         }
         HEADER.append(ANSI_RESET);
@@ -78,9 +82,21 @@ public class ConsolePrinter implements Printer {
                 HEADER.append(TAB);
                 LongUtils.appendLongToStringBuilder(bids.get(i + 1), HEADER, quantityDecimals);
                 HEADER.append(NEW_LINE);
+                if (highBid == -1) {
+                    highBid = bids.get(i);
+                }
             }
         }
         HEADER.append(ANSI_RESET);
+        HEADER.append(NEW_LINE);
+        HEADER.append(NEW_LINE);
+        HEADER.append(SPREAD);
+        if (highBid != -1 && lowAsk != -1) {
+            LongUtils.appendLongToStringBuilder(lowAsk - highBid, HEADER, priceDecimals);
+        } else {
+            HEADER.append("N/A");
+        }
+        HEADER.append(NEW_LINE);
         return HEADER;
     }
 
